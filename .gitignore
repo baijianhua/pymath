@@ -105,7 +105,9 @@ celerybeat.pid
 .env
 .venv
 env/
-venv/
+#venv/*表示忽略venv下面的内容，但不忽略这个目录本身
+venv/*
+!venv/pip.ini
 ENV/
 env.bak/
 venv.bak/
