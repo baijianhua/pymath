@@ -25,7 +25,7 @@ x = np.linspace(-10, 10, 100)
 ax.plot(x, 2*x)
 
 
-ax1 = SubplotZero(fig, 221)
-fig.add_subplot(ax1)
+# ax1 = SubplotZero(fig, 221)
+# fig.add_subplot(ax1)
 
 plt.show()
