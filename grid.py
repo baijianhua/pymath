@@ -1,31 +1,30 @@
 import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.axes import Axes
 
-# 11
-def build_cartesian_plane(max_quadrant_range):
-    """ The quadrant range controls the range of the quadrants"""
-    l = []
-    zeros = []
-    plt.grid(True, color='b', zorder=0,)
-    ax = plt.axes()
-    head_width = float(0.1) * max_quadrant_range
-    head_length = float(0.1) * max_quadrant_range
-    ax.arrow(0, 0, max_quadrant_range, 0, head_width=head_width, head_length=head_length, fc='k', ec='k',zorder=100)
-    ax.arrow(0, 0, -max_quadrant_range, 0, head_width=head_width, head_length=head_length, fc='k', ec='k', zorder=100)
-    ax.arrow(0, 0, 0, max_quadrant_range, head_width=head_width, head_length=head_length, fc='k', ec='k', zorder=100)
-    ax.arrow(0, 0, 0, -max_quadrant_range, head_width=head_width, head_length=head_length, fc='k', ec='k', zorder=100)
-    counter_dash_width = max_quadrant_range * 0.02
-    dividers = [0,.1,.2,.3,.4, .5, .6, .7, .8, .9, 1]
-    for i in dividers:
-        plt.plot([-counter_dash_width, counter_dash_width], [i*max_quadrant_range, i*max_quadrant_range], color='k')
-        plt.plot([i * max_quadrant_range, i*max_quadrant_range], [-counter_dash_width, counter_dash_width], color='k')
-        plt.plot([-counter_dash_width, counter_dash_width], [-i * max_quadrant_range, -i * max_quadrant_range], color='r')
-        plt.plot([-i * max_quadrant_range, -i * max_quadrant_range], [-counter_dash_width, counter_dash_width], color='r')
+# x = np.arange(0.0, 1.0 + 0.01, 0.01)
+# y = 2*x
+# plt.plot(x, y, '-', lw=2)
 
-        l.append(i * max_quadrant_range)
-        l.append(-i * max_quadrant_range)
-        zeros.append(0)
-        zeros.append(0)
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Coordinate')
+plt.grid(True)
 
 
-build_cartesian_plane(10)
+def draw_vector(x, y, to_x, to_y):
+    plt.quiver(x, y, to_x, to_y, angles='xy', scale_units='xy', scale=1, color='#FF0000')
+
+
+draw_vector(0, 0, 4, 5)
+# axes: Axes = plt.axes(label="axes1")
+# 获取当前坐标轴
+axes: Axes = plt.gca()
+axes.set_aspect('equal')
+axes.set_xlim(-2, 10)
+axes.set_ylim(-2, 10)
+
 plt.show()
+
+
+

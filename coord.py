@@ -28,7 +28,7 @@ yAxis: Axes = ax.spines['left']
 yAxis.set_position(('data', 0))
 xAxis: Axes = ax.spines['bottom']
 xAxis.set_position(('data', 0))
-xAxis.set_axisline_style("-|>")
+#xAxis.set_axisline_style("-|>")
 
 # notice 设定x的范围
 x = np.arange(-1, 3, 0.01)
