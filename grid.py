@@ -12,7 +12,8 @@ plt.ylabel('y')
 plt.title('Coordinate')
 plt.grid(True)
 
-draw_vector(0, 0, 4, 5)
+draw_vector(0,0,1,5)
+draw_vector(0, 0, 4, 0.5)
 # axes: Axes = plt.axes(label="axes1")
 # 获取当前坐标轴
 axes: Axes = plt.gca()
