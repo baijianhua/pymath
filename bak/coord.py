@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
-from basic_units import cm
+from bak.basic_units import cm
 
 fig: Figure = plt.figure()
 # notice 得到并设置坐标坐标系

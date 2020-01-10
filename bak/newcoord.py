@@ -3,7 +3,7 @@ import numpy as np
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 
-from basic_units import cm
+from bak.basic_units import cm
 
 x = np.linspace(0, 20, 2)
 cm_x = [i * cm for i in x]
