@@ -5,8 +5,8 @@ from numpy import *
 
 ax = init_coord(-2, 6)
 # 用numpy的array而非python原生array,来方便做向量与标量的乘法，否则很麻烦
-g1 = array([0.9, 0.2])
-g2 = array([0.1, 0.8])
+g1 = array([1.3, 0.2])
+g2 = array([0.2, 1.5])
 # 协变分量的两个基向量为列构成的矩阵
 G = mat([g1, g2]).T
 print(G)
