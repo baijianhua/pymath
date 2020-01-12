@@ -1,11 +1,89 @@
 from mpl_toolkits.axisartist import AxisArtist
 from mpl_toolkits.axisartist.axislines import SubplotZero, Axes
 import matplotlib.pyplot as plt
-import numpy as np
+from numpy import *
+
+
+# Coord(object)表示继承于object
+class Coord:
+    G: mat
+    ax: Axes
+    g1: array
+    g2: array
+    color = "black"
+    Gi: mat
+
+    def __init__(self, ax: Axes, g1: array, g2: array, color="black"):
+        # print("coord=", g1, g2)
+        # 协变分量的两个基向量为列构成的矩阵,要转置一下，否则方向不对
+        # G = mat([g1, g2]).T
+        self.G = mat([g1, g2]).T
+        self.Gi = self.G.I
+        self.g1 = g1
+        self.g2 = g2
+        self.ax = ax
+        self.color = color
+
+    def draw_basis(self):
+        # 以第一列为起点，第二列为终点, 第三个参数是颜色
+        # linestyle='dashed'
+        # ax.plot([0, G[0, 0]],
+        #         [0, G[1, 0]],
+        #         color=color
+        #         )
+        max_scale = 10
+
+        for i in range(max_scale):
+            self.ax.scatter(self.g1[0] * i, self.g1[1] * i, color="blue")
+            self.ax.scatter(self.g2[0] * i, self.g2[1] * i, color="blue")
+
+        self.ax.plot([0, self.g1[0] * max_scale],
+                     [0, self.g1[1] * max_scale],
+                     color=self.color
+                     )
+        self.ax.plot([0, self.g2[0] * max_scale],
+                     [0, self.g2[1] * max_scale],
+                     color=self.color
+                     )
+
+    def get_xy_for_vector(self, vector: array)->array:
+        # 求出向量在斜角坐标中的读数。
+        # 这个地方很奇怪。Gi是这个坐标系的对偶坐标系的向量矩阵，
+        # 为什么与对偶坐标系的基向量矩阵相乘，可以得到斜角读数呢？
+        vv = self.Gi @ vector
+        v = [vv[0, 0], vv[0, 1]]
+        return v
+
+    def draw_components_for_vector(self, vector: array):
+        v = self.get_xy_for_vector(vector)
+        # 将斜角读数转化为笛卡尔读数
+        # 这个算式的意思是将g1乘以x倍后得到的向量在笛卡尔坐标系的读数。
+        c1 = self.g1 * v[0]
+        c2 = self.g2 * v[1]
+        # 从基向量的分量的笛卡尔坐标点，朝着向量所在点绘制虚线
+        self.ax.plot([c1[0], vector[0]],
+                     [c1[1], vector[1]],
+                     color=self.color,
+                     linestyle="dashed"
+                     )
+        self.ax.plot([c2[0], vector[0]],
+                     [c2[1], vector[1]],
+                     color=self.color,
+                     linestyle="dashed"
+                     )
+
+    # 获取对偶坐标系。 因为是在定义过程中，所以Coord还没有? 声明一个Coord: pass
+    def get_dual_coord(self, color="black") -> 'Coord':
+        # 逆变坐标系
+        # 要是直接能用1/g1得出rg1就好了。这是不行的，不仅要g1*rg1=1, 还要g1*rg2=0
+        rg1 = array(get_column_from_matrix(self.Gi, 0))
+        rg2 = array(get_column_from_matrix(self.Gi, 1))
+        dual_coord = Coord(self.ax, rg1, rg2, color)
+        return dual_coord
 
 
 # 初始化坐标系
-def init_coord(min_size=-2, max_size=8) -> Axes:
+def init_cartesian_coord(min_size=-2, max_size=8) -> Axes:
     # max_size = 8
     # min_size = -2
     # 本身就应该已经有一个plot了。这个plt可以通过调用figure，来构造一个新的图形。
@@ -40,33 +118,6 @@ def init_coord(min_size=-2, max_size=8) -> Axes:
     return ax
 
 
-def draw_basis(ax: Axes, G: np.matrix, color="black"):
-    # 以第一列为起点，第二列为终点, 第三个参数是颜色
-    # linestyle='dashed'
-    # ax.plot([0, G[0, 0]],
-    #         [0, G[1, 0]],
-    #         color=color
-    #         )
-    max_scale = 10
-    g1 = get_column_from_matrix(G, 0)
-    g2 = get_column_from_matrix(G, 1)
-
-    for i in range(max_scale):
-        ax.scatter(g1[0] * i, g1[1] * i, color="blue")
-        ax.scatter(g2[0] * i, g2[1] * i, color="blue")
-
-    ax.plot([0, g1[0] * max_scale],
-            [0, g1[1] * max_scale],
-            color=color
-            )
-    ax.plot([0, g2[0] * max_scale],
-            [0, g2[1] * max_scale],
-            color=color
-            )
-    # ax.scatter(4, 3, color="blue")
-    # 怎么绘制坐标的刻度呢？
-
-
 def draw_vector(ax: Axes, point: [], with_components=False):
     ax.plot([0, point[0]],
             [0, point[1]], color="black", linewidth=2)
@@ -82,24 +133,5 @@ def draw_components(ax: Axes, point: []):
             [point[1], point[1]], color="black", linestyle="dashed")
 
 
-def get_column_from_matrix(m: np.mat, c: int) -> np.array:
-    return np.array([m[0, c], m[1, c]])
-
-
-def draw_components_in_coord(ax: Axes, v: np.array, G: np.mat, color="black"):
-    g1 = get_column_from_matrix(G, 0)
-    g2 = get_column_from_matrix(G, 1)
-    # x*g1, 即x个g1, 可以得到斜角坐标系的x分量，在笛卡尔坐标系的读数，即g1v.
-    g1v = g1 * v[0]
-    g2v = g2 * v[1]
-    # 从基向量的分量的笛卡尔坐标点，朝着向量所在点绘制虚线
-    ax.plot([g1v[0], v[0]],
-            [g1v[1], v[1]],
-            color=color,
-            linestyle="dashed"
-            )
-    ax.plot([g2v[0], v[0]],
-            [g2v[1], v[1]],
-            color=color,
-            linestyle="dashed"
-            )
+def get_column_from_matrix(m: mat, c: int) -> array:
+    return array([m[0, c], m[1, c]])
