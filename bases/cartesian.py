@@ -12,18 +12,23 @@ class Coord:
     g2: array
     color = "black"
     Gi: mat
+    Gd: mat
 
     def __init__(self, ax: Axes, g1: array, g2: array, color="black"):
         # print("coord=", g1, g2)
         # 协变分量的两个基向量为列构成的矩阵,要转置一下，否则方向不对
         # G = mat([g1, g2]).T
         self.G = mat([g1, g2]).T
+        # 基向量矩阵的逆矩阵，用来将向量的笛卡尔读数转换成斜角读数
         self.Gi = self.G.I
+        # 对偶坐标系的基向量矩阵是逆矩阵的转置。这是由对偶坐标系的定义得来的？gi*gi=1, gi*gj=0
+        self.Gd = self.Gi.T
         self.g1 = g1
         self.g2 = g2
         self.ax = ax
         self.color = color
 
+    # 绘制斜角坐标系
     def draw_basis(self):
         # 以第一列为起点，第二列为终点, 第三个参数是颜色
         # linestyle='dashed'
@@ -32,7 +37,6 @@ class Coord:
         #         color=color
         #         )
         max_scale = 10
-
         for i in range(max_scale):
             self.ax.scatter(self.g1[0] * i, self.g1[1] * i, color="blue")
             self.ax.scatter(self.g2[0] * i, self.g2[1] * i, color="blue")
@@ -46,14 +50,13 @@ class Coord:
                      color=self.color
                      )
 
-    def get_xy_for_vector(self, vector: array)->array:
-        # 求出向量在斜角坐标中的读数。
-        # 这个地方很奇怪。Gi是这个坐标系的对偶坐标系的向量矩阵，
-        # 为什么与对偶坐标系的基向量矩阵相乘，可以得到斜角读数呢？
+    # 求向量在斜角坐标中的读数。
+    def get_xy_for_vector(self, vector: array) -> array:
         vv = self.Gi @ vector
         v = [vv[0, 0], vv[0, 1]]
         return v
 
+    # 绘制一个向量的在当前斜角坐标的分量
     def draw_components_for_vector(self, vector: array):
         v = self.get_xy_for_vector(vector)
         # 将斜角读数转化为笛卡尔读数
@@ -76,8 +79,8 @@ class Coord:
     def get_dual_coord(self, color="black") -> 'Coord':
         # 逆变坐标系
         # 要是直接能用1/g1得出rg1就好了。这是不行的，不仅要g1*rg1=1, 还要g1*rg2=0
-        rg1 = array(get_column_from_matrix(self.Gi, 0))
-        rg2 = array(get_column_from_matrix(self.Gi, 1))
+        rg1 = array(get_column_from_matrix(self.Gd, 0))
+        rg2 = array(get_column_from_matrix(self.Gd, 1))
         dual_coord = Coord(self.ax, rg1, rg2, color)
         return dual_coord
 
