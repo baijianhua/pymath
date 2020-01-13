@@ -1,12 +1,13 @@
 from numpy import *
 from matplotlib.pyplot import *
-from bases.cartesian import Cartesian, Coord
+from bases.oblique_coord import ObliqueCoord
+from bases.cartesian import Cartesian
 
 ax = Cartesian(-2, 6)
 g1 = array([3, 1])
 g2 = array([1, 4])
 
-co_coord = Coord(ax, g1, g2, "red")
+co_coord = ObliqueCoord(ax, g1, g2, "red")
 co_coord.draw_basis()
 
 
