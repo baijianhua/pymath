@@ -11,7 +11,17 @@ class ObliqueCoord:
     # 这三个矩阵是什么关系呢？
     # 本坐标系的两个基向量在笛卡尔坐标系中的读数矩阵(列分别是g1,g2)，
     G: mat
-    # 用来将笛卡尔坐标读数转换成本坐标系的读数
+    # 变形矩阵的逆矩阵，用来将笛卡尔坐标读数转换成本坐标系的读数
+    # 逆矩阵的几何意义又是什么？也值得追问。只有逆矩阵，没有逆向量。
+
+    # 逆矩阵是对基向量的反向操作，如果g1在x方向放大a倍，逆矩阵则缩小a倍，
+    # 如果基向量移动了x轴，则逆矩阵要讲x轴移动回去。
+    # 求逆矩阵，可以尝试用Ma=b, 然后找到一个矩阵使得a = M1b, M1就是M的逆矩阵。
+    # 这个式子的含义是，找到一个对向量b进行变形的矩阵，让变形后的结果刚好与a相同。这个矩阵就是M的逆矩阵
+    # 感觉逆矩阵就是矩阵的除法。一个算式除以某个矩阵，等价于它乘以这个矩阵的逆矩阵。
+    # 这样说，逆矩阵的几何意义，也可说是消除坐标变形。
+    
+    # 但逆矩阵的运算颇为复杂，因为你对一个基向量的一个分量的变动，还会影响另一个基向量的分量，所以不是直接修改基向量的分量那么简单。
     G_inverse: mat
     # 对偶坐标系的两个基向量笛卡尔读数构成的矩阵
     G_dual: mat
@@ -31,7 +41,8 @@ class ObliqueCoord:
         # 协变分量的两个基向量为列构成的矩阵,要转置一下，否则方向不对
         self.G = mat([g1, g2]).T
         self.G_inverse = self.G.I
-        # 对偶坐标系的基向量矩阵是逆矩阵的转置。这是由对偶坐标系的定义得来的？gi*gi=1, gi*gj=0
+        # 对偶坐标系的基向量矩阵是逆矩阵的转置。
+        # 这是由对偶坐标系的定义得来的: gi*gi=1, gi*gj=0，逆矩阵的转置符合这个性质（这又是为什么？）
         self.G_dual = self.G_inverse.T
         self.g1 = g1
         self.g2 = g2
@@ -69,8 +80,12 @@ class ObliqueCoord:
         """
         给一个向量的斜角读数，获取这个向量的笛卡尔读数
         
-        如果向量点乘，是将一个向量映射到另一个向量，那这个事情可不可以这样理解呢？
-        还是对向量点乘理解不透彻
+        为什么一个向量的斜角读数左乘基向量矩阵，可以得到笛卡尔坐标读数呢？
+        用向量加法来解释。
+        已知一个向量的斜角读数，表示这个向量沿两个基向量分解成两个向量，分别是基向量g1的x倍， g2的y倍。
+        其笛卡尔坐标系读数分别是x*g1，y*g2，那么这个向量本身的笛卡尔读数自然就是x*g1+y*g2
+
+        向量加法比较简单直观，直接绘制x1+x2, y1+y2就可以看出来了。也可以说，这正是向量加法的定义。
         :param vector_in_oblique:
         :return:
         """
@@ -80,6 +95,11 @@ class ObliqueCoord:
     def to_oblique_components(self, vector_in_cartesian: array) -> array:
         """
         获取笛卡尔向量在斜角坐标中的读数。
+
+        基向量"逆向量"，构成了矩阵G_inverse。那么，笛卡尔坐标系中的x,y是逆向量的多少倍，它的和就是
+        斜角坐标的读数
+        向量a,b的逆向量，是1/2a, 1/2b 这样两个向量相乘，等于1/2+1/2=1
+
         :param vector_in_cartesian: 笛卡尔向量
         :return: 斜角坐标读数
         """
@@ -87,25 +107,24 @@ class ObliqueCoord:
         v = array([vv[0, 0], vv[0, 1]])
         return v
 
-    def draw_oblique_components(self, vector: array):
+    def draw_oblique_components(self, vector_in_cartesian: array):
         """
         绘制一个向量的在当前斜角坐标的分量
-        :param vector: 笛卡尔向量
+        :param vector_in_cartesian: 笛卡尔向量
         """
-
-        v = self.to_oblique_components(vector)
+        v = self.to_oblique_components(vector_in_cartesian)
         # 将斜角读数转化为笛卡尔读数
         # 这个算式的意思是将g1乘以x倍后得到的向量在笛卡尔坐标系的读数。
         c1 = self.g1 * v[0]
         c2 = self.g2 * v[1]
         # 从基向量的分量的笛卡尔坐标点，朝着向量所在点绘制虚线
-        self.ax.plot([c1[0], vector[0]],
-                     [c1[1], vector[1]],
+        self.ax.plot([c1[0], vector_in_cartesian[0]],
+                     [c1[1], vector_in_cartesian[1]],
                      color=self.color,
                      linestyle="dashed"
                      )
-        self.ax.plot([c2[0], vector[0]],
-                     [c2[1], vector[1]],
+        self.ax.plot([c2[0], vector_in_cartesian[0]],
+                     [c2[1], vector_in_cartesian[1]],
                      color=self.color,
                      linestyle="dashed"
                      )

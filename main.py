@@ -10,11 +10,12 @@ g1 = array([0.6, 0.2])
 g2 = array([0.2, 1.7])
 co_coord = ObliqueCoord(cartesian, g1, g2, "red")
 
+# 逆变坐标系
 contra_coord = co_coord.get_dual_coord(color="blue")
 co_coord.draw_basis()
 contra_coord.draw_basis()
 
-# 接下来如何显示向量以及它在不同坐标系下面的分量？
+# 显示向量以及它在不同坐标系下面的分量
 cartesian_vector = array([2, 2])
 v1 = co_coord.to_oblique_components(cartesian_vector)
 v2 = contra_coord.to_oblique_components(cartesian_vector)
