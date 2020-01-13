@@ -12,11 +12,13 @@ co_coord = ObliqueCoord(cartesian, g1, g2, "red")
 
 # 逆变坐标系
 contra_coord = co_coord.get_dual_coord(color="blue")
+# contra_coord.to_cartesian_components([1, 1])
+
 co_coord.draw_basis()
 contra_coord.draw_basis()
 
 # 显示向量以及它在不同坐标系下面的分量
-cartesian_vector = array([2, 2])
+cartesian_vector = array([4, 3])
 v1 = co_coord.to_oblique_components(cartesian_vector)
 v2 = contra_coord.to_oblique_components(cartesian_vector)
 print("笛卡尔读数", cartesian_vector)

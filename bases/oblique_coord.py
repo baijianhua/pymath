@@ -89,8 +89,17 @@ class ObliqueCoord:
         :param vector_in_oblique:
         :return:
         """
-        vv = self.G @ vector_in_oblique
-        return array([vv[0, 0], vv[0, 1]])
+        # 这样更好理解
+        x = vector_in_oblique[0]
+        y = vector_in_oblique[1]
+        vc = self.g1 * x + self.g2 * y
+        return vc
+
+        # vv = self.G @ vector_in_oblique
+        # print(vv)
+        # return array([vv[0, 0], vv[0, 1]])
+
+
 
     def to_oblique_components(self, vector_in_cartesian: array) -> array:
         """

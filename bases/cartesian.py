@@ -16,7 +16,7 @@ class Cartesian:
         # 本身就应该已经有一个plot了。这个plt可以通过调用figure，来构造一个新的图形。
         # fig可以通过add_subplot，为自己添加一个坐标系
         # 绘图是以坐标系为基础的。
-        fig = plt.figure(figsize=(max_size - min_size, max_size - min_size))
+        fig = plt.figure(figsize=(max_size - min_size, max_size - min_size), dpi=80)
         self.ax = SubplotZero(fig, 111)
         fig.add_subplot(self.ax)
 
