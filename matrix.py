@@ -8,7 +8,8 @@ from bases.cartesian import Cartesian
 # print(m1)
 # print(m1.I)
 ax = Cartesian(-4, 8)
-g1 = array([4, 2])
+# python有精度损失。要靠合理选取数字。不能控制吗？
+g1 = array([6, 2])
 g2 = array([1, 4])
 
 co_coord = ObliqueCoord(ax, g1, g2, "red")
