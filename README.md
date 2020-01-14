@@ -1,4 +1,8 @@
 # pymath
+除了matplotlib还有很多其他图形库。
+
+plot.py  
+https://www.zhihu.com/question/39684179  
 
 # 目标
 - 绘制逆变和协变坐标系的刻度线
