@@ -16,6 +16,7 @@ class ObliqueCoord:
     G_inverse: mat
     # 对偶坐标系的两个基向量的笛卡尔读数构成的矩阵
     G_dual: mat
+    metrics_tensor: mat
     # matplotlib 画布
     ax: Axes
     color = "black"
@@ -35,6 +36,7 @@ class ObliqueCoord:
         # 对偶坐标系的基向量矩阵是逆矩阵的转置。
         # 这是由对偶坐标系的定义得来的: gi*gi=1, gi*gj=0，逆矩阵的转置符合这个性质（这又是为什么？）
         self.G_dual = self.G_inverse.T
+        self.metrics_tensor = self.G.T @ self.G
         self.g1 = g1
         self.g2 = g2
         self.ax = coord.ax
@@ -53,7 +55,7 @@ class ObliqueCoord:
 
         :return:
         """
-        max_scale = 10
+        max_scale = 30
         for i in range(max_scale):
             self.ax.scatter(self.g1[0] * i, self.g1[1] * i, color="blue")
             self.ax.scatter(self.g2[0] * i, self.g2[1] * i, color="blue")
