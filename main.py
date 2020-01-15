@@ -15,7 +15,7 @@ contra_coord = co_coord.get_dual_coord(color="blue")
 # contra_coord.to_cartesian_components([1, 1])
 
 co_coord.draw_basis()
-contra_coord.draw_basis()
+# contra_coord.draw_basis()
 
 # 显示向量以及它在不同坐标系下面的分量
 cartesian_vector = array([4, 3])
@@ -27,7 +27,7 @@ print("对偶读数", v2)
 print("斜角和对偶点乘", v1@v2)
 
 cartesian.draw_vector(cartesian_vector, with_components=True)
-co_coord.draw_oblique_components(cartesian_vector)
-contra_coord.draw_oblique_components(cartesian_vector)
+# co_coord.draw_oblique_components(cartesian_vector)
+# contra_coord.draw_oblique_components(cartesian_vector)
 
 plt.show()

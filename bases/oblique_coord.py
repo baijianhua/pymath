@@ -21,6 +21,7 @@ class ObliqueCoord:
     ax: Axes
     color = "black"
     cartesian: 'Cartesian'
+    __origin = array([0, 0])
 
     def __init__(self, coord: 'Cartesian', g1: array, g2: array, color="black"):
         """
@@ -55,19 +56,17 @@ class ObliqueCoord:
 
         :return:
         """
+        # 硬编码这个值不对。应该让它一直绘制，直到屏幕边缘。现在不知道屏幕边缘在哪里
         max_scale = 30
         for i in range(max_scale):
             self.ax.scatter(self.g1[0] * i, self.g1[1] * i, color="blue")
             self.ax.scatter(self.g2[0] * i, self.g2[1] * i, color="blue")
 
-        self.ax.plot([0, self.g1[0] * max_scale],
-                     [0, self.g1[1] * max_scale],
-                     color=self.color
-                     )
-        self.ax.plot([0, self.g2[0] * max_scale],
-                     [0, self.g2[1] * max_scale],
-                     color=self.color
-                     )
+        # print(self.__origin)
+        # print(self.g1)
+        # print(self.g1 * max_scale)
+        self.draw_line(self.__origin, self.g1 * max_scale, linestyle="solid")
+        self.draw_line(self.__origin, self.g2 * max_scale, linestyle="solid")
 
     def to_cartesian_components(self, vector_in_oblique: array) -> array:
         """
@@ -119,16 +118,8 @@ class ObliqueCoord:
         c1 = self.g1 * v[0]
         c2 = self.g2 * v[1]
         # 从基向量的分量的笛卡尔坐标点，朝着向量所在点绘制虚线
-        self.ax.plot([c1[0], vector_in_cartesian[0]],
-                     [c1[1], vector_in_cartesian[1]],
-                     color=self.color,
-                     linestyle="dashed"
-                     )
-        self.ax.plot([c2[0], vector_in_cartesian[0]],
-                     [c2[1], vector_in_cartesian[1]],
-                     color=self.color,
-                     linestyle="dashed"
-                     )
+        self.draw_line(c1, vector_in_cartesian)
+        self.draw_line(c2, vector_in_cartesian)
 
     def get_dual_coord(self, color="black") -> 'ObliqueCoord':
         """
@@ -150,4 +141,32 @@ class ObliqueCoord:
         dual_coord = ObliqueCoord(self.cartesian, rg1, rg2, color)
         return dual_coord
 
+    def draw_dash_lines(self, vector_in_cartesian: array, vector_in_oblique: array):
+        """
+        给定一个笛卡尔点，和一个斜角坐标，绘制这个斜角坐标到这个笛卡尔点的连线。
+        :param vector_in_cartesian:
+        :param vector_in_oblique:
+        :return:
+        """
+        x = vector_in_oblique[0]
+        y = vector_in_oblique[1]
+        c1 = self.g1 * x
+        c2 = self.g2 * y
+        self.draw_line(c1, vector_in_cartesian)
+        self.draw_line(c2, vector_in_cartesian)
 
+    def draw_line(self, v1: array, v2: array, linestyle="dashed"):
+        """
+        从一个点(v1)绘制直线到另外一个点(v2)
+
+        输入向量的读数都是笛卡尔读数！
+        :param v1:
+        :param v2:
+        :param linestyle:
+        :return:
+        """
+        self.ax.plot([v1[0], v2[0]],
+                     [v1[1], v2[1]],
+                     color=self.color,
+                     linestyle=linestyle
+                     )
