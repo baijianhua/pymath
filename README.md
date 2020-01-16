@@ -15,3 +15,10 @@ https://www.zhihu.com/question/39684179
 其实所谓的向量绘制，就是在一个笛卡尔坐标系的底板上，用不同的颜色，绘制向量和直线。
 - 通过坐标变换矩阵（这个用matplotlib就可以了，绘制直线的方法就够了），看出向量变形。 
 
+#python的matrix和array
+
+https://docs.scipy.org/doc/numpy/user/numpy-for-matlab-users.html
+
+python似乎计划放弃matrix,但奇怪的是matrix又添加了不少方法。而且m.I 这个太好用了。
+而且matrix有方向要求（行向量和列向量不能混用），更符合线性代数。  
+但python说array更符合张量代数。matrix只能是二维的  

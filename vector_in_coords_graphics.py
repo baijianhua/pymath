@@ -1,7 +1,12 @@
+"""
+绘制度一个向量的笛卡尔坐标、斜角坐标以及对偶坐标
+
+再次声明，对偶坐标，逆变、协变分量，这些概念，只是借用一下而已。
+不完全认同，而且这些概念本身可能有错误。
+"""
 from numpy import *
 from matplotlib.pyplot import *
 
-from bases.common import get_column_from_matrix
 from bases.oblique_coord import ObliqueCoord
 from bases.cartesian import Cartesian
 
@@ -15,34 +20,13 @@ dual_coord = co_coord.get_dual_coord("blue")
 co_coord.draw_basis()
 dual_coord.draw_basis()
 
-g = co_coord.G
-gd = co_coord.G_dual
-gi = co_coord.G_inverse
-m = co_coord.metrics_tensor
-
-print("G", g)
-print("G.I", gi)
-print("G.dual", gd)
-print("metrics tensor", co_coord.metrics_tensor)
-
-
 v_c = array([2, 3])
 v_o = co_coord.to_oblique_components(v_c)
 v_d = dual_coord.to_oblique_components(v_c)
 
-print("v in cartesian", v_c)
-print("v in oblique", v_o)
-print("v_o to cartesian", co_coord.to_cartesian_components(v_o))
-print("v in dual", v_d, m @ v_o, gd.I @ v_c)
-print("v_o@v_d", v_o @ v_d)
-print("dual_coord.G.T @ v_c", dual_coord.G.T @ v_c)
-print("v_c @ dual_coord.G", v_c @ dual_coord.G)
-
 ax.draw_vector(v_c, True)
 co_coord.draw_oblique_components(v_c)
 dual_coord.draw_oblique_components(v_c)
-print("v1.T @ m @v1", v_o.T @ m @ v_o)
-
 
 wm = get_current_fig_manager()
 if hasattr(wm, 'window'):

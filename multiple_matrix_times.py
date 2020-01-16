@@ -1,9 +1,9 @@
-from numpy import *
-from matplotlib.pyplot import *
+"""
+理解矩阵连乘的含义。
+"""
 
-from bases.common import get_column_from_matrix
-from bases.oblique_coord import ObliqueCoord
-from bases.cartesian import Cartesian
+from numpy import *
+
 
 M0 = mat([[2, 0],
           [0, 2]])
@@ -11,8 +11,8 @@ M1 = mat([[2, 0],
           [0, 2]])
 M2 = mat([[2, 0],
           [1, 2]])
-v = [1, 1]
-
-vc = M0 @ M1 @ M2 @ v
+v = mat([1, 1])
+# 矩阵乘法是有维数要求的。不能乱来。所以vc要转置。 向量没有维数要求，行向量列向量都可以乘
+vc = M0 @ M1 @ M2 @ v.T
 print(vc)
-print(M0.I @ M1.I @ M2.I @ [8, 12])
+print(M0.I @ M1.I @ M2.I @ vc)

@@ -1,6 +1,19 @@
-from numpy import mat, array
+"""
+测试矩阵乘法
+"""
+from numpy import mat, array, multiply
 
-a = array([1, 2])
+a = mat([1, 2])
 print(a*3)
 
-#$$f'(a) = \lim_{x \to a} \frac{f(x) - f(a)}{x-a}$$
+m1 = mat([[1, 2],
+          [3, 4]])
+
+m2 = mat([[5, 6],
+          [7, 8]])
+
+print(m1*m2)
+print(m1@m2)
+print(multiply(m1, m2))
+
+
