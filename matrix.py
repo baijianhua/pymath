@@ -19,10 +19,10 @@ g = co_coord.G
 gd = co_coord.G_dual
 gi = co_coord.G_inverse
 m = co_coord.metrics_tensor
+
 print("G", g)
 print("G.I", gi)
 print("G.dual", gd)
-print("G@G.I", g @ gi)
 print("metrics tensor", co_coord.metrics_tensor)
 
 
@@ -32,8 +32,11 @@ v_d = dual_coord.to_oblique_components(v_c)
 
 print("v in cartesian", v_c)
 print("v in oblique", v_o)
+print("v_o to cartesian", co_coord.to_cartesian_components(v_o))
 print("v in dual", v_d, m @ v_o, gd.I @ v_c)
 print("v_o@v_d", v_o @ v_d)
+print("dual_coord.G.T @ v_c", dual_coord.G.T @ v_c)
+print("v_c @ dual_coord.G", v_c @ dual_coord.G)
 
 ax.draw_vector(v_c, True)
 co_coord.draw_oblique_components(v_c)
