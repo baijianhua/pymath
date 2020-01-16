@@ -45,4 +45,4 @@ wm = get_current_fig_manager()
 if hasattr(wm, 'window'):
     wm.window.geometry("600x600")
 
-# show()
+show()
