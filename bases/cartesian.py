@@ -1,6 +1,6 @@
 from matplotlib import pyplot as plt
 from mpl_toolkits.axisartist import Axes, SubplotZero, AxisArtist
-
+from numpy import *
 
 class Cartesian:
     ax: Axes
@@ -42,15 +42,16 @@ class Cartesian:
             # hides borders
             self.ax.axis[direction].set_visible(False)
 
-    def draw_vector(self, point: [], with_components=False):
+    def draw_vector(self, point: array, with_components=False, color="black"):
         """
         在笛卡尔坐标系中绘制向量
+        :param color:
         :param point:
         :param with_components: 是否绘制笛卡尔分量
         :return:
         """
         self.ax.plot([0, point[0]],
-                     [0, point[1]], color="black", linewidth=2)
+                     [0, point[1]], color=color, linewidth=2)
         if with_components:
             self.draw_components(point)
 

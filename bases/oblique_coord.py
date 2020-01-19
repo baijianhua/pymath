@@ -20,10 +20,11 @@ class ObliqueCoord:
     # matplotlib 画布
     ax: Axes
     color = "black"
+    linewidth = 1
     cartesian: 'Cartesian'
     __origin = array([0, 0])
 
-    def __init__(self, coord: 'Cartesian', g1: array, g2: array, color="black"):
+    def __init__(self, coord: 'Cartesian', g1: array, g2: array, color="black", linewidth=1):
         """
         用两个基向量构成一个新的坐标系
         :param coord: 笛卡尔坐标系。包含了坐标边界以及Axes对象
@@ -43,6 +44,7 @@ class ObliqueCoord:
         self.ax = coord.ax
         self.color = color
         self.cartesian = coord
+        self.linewidth = linewidth
 
     def draw_basis(self):
         """
@@ -57,7 +59,7 @@ class ObliqueCoord:
         :return:
         """
         # 硬编码这个值不对。应该让它一直绘制，直到屏幕边缘。现在不知道屏幕边缘在哪里
-        max_scale = 30
+        max_scale = 100
         for i in range(max_scale):
             self.ax.scatter(self.g1[0] * i, self.g1[1] * i, color="blue")
             self.ax.scatter(self.g2[0] * i, self.g2[1] * i, color="blue")
@@ -155,11 +157,13 @@ class ObliqueCoord:
         self.draw_line(c1, vector_in_cartesian)
         self.draw_line(c2, vector_in_cartesian)
 
-    def draw_line(self, v1: array, v2: array, linestyle="dashed"):
+    def draw_line(self, v1: array, v2: array, linestyle="dashed", linewidth=1):
         """
         从一个点(v1)绘制直线到另外一个点(v2)
 
         输入向量的读数都是笛卡尔读数！
+        :param linewidth:
+        :param linewidth:
         :param v1:
         :param v2:
         :param linestyle:
@@ -168,5 +172,11 @@ class ObliqueCoord:
         self.ax.plot([v1[0], v2[0]],
                      [v1[1], v2[1]],
                      color=self.color,
-                     linestyle=linestyle
+                     linestyle=linestyle,
+                     linewidth=linewidth
                      )
+
+    def draw_vector(self, vector_in_oblique, linewidth=2):
+        c = self.to_cartesian_components(vector_in_oblique)
+        print("c", c)
+        self.draw_line(self.__origin, c, linewidth=linewidth, linestyle="-")
