@@ -15,6 +15,7 @@ co_coord = ObliqueCoord(ax, g1, g2, "red")
 contra_coord = co_coord.get_dual_coord("blue")
 
 g = co_coord.G
+gt = co_coord.G.T
 gd = co_coord.G_dual
 gi = co_coord.G_inverse
 m = co_coord.metrics_tensor
@@ -37,3 +38,8 @@ print("gd.T @ v_c == v_o?", gd.T @ v_c)
 # print("gd @ v_c == v_o.T?", gd @ v_c)
 print("v_c @ dual_coord.G", v_c @ contra_coord.G)
 print("v1.T @ m @v1", v_o.T @ m @ v_o)
+
+print(v_d @ v_o, v_c @ v_c)
+print(g @ v_o)
+print(v_d @ g.T.I)
+
