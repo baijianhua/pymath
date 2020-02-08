@@ -7,8 +7,8 @@
 from numpy import *
 from matplotlib.pyplot import *
 
-from bases.oblique_coord import ObliqueCoord
-from bases.cartesian import Cartesian
+from common.oblique_coord import ObliqueCoord
+from common.cartesian import Cartesian
 
 ax = Cartesian(-3, 7)
 # python有精度损失。

@@ -1,7 +1,7 @@
 from numpy import *
 
-from bases.cartesian import Cartesian
-from bases.oblique_coord import ObliqueCoord
+from common.cartesian import Cartesian
+from common.oblique_coord import ObliqueCoord
 
 '''
 验证笛卡尔坐标、逆变坐标、协变坐标、度量张量之间的关系

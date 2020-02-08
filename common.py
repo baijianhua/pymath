@@ -7,11 +7,12 @@ from sympy.plotting.plot import MatplotlibBackend
 
 def plot_latex(lat=""):
     tex = "$" + lat + "$"
+    print("tex=", tex)
     # 不设置这一行会出现dvipng报错
     rc('font', **{'family': 'sans-serif', 'sans-serif': ['Helvetica']})
     rc('text', usetex=True)
     rc('text.latex', preamble=r'\usepackage{amsmath}')
-    plt.text(0.05, 0.5, tex, size=40)
+    plt.text(0.05, 0.05, tex, size=20)
     plt.axis('off')
     plt.show()
 

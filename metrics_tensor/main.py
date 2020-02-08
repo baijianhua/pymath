@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
-from bases.oblique_coord import ObliqueCoord
-from bases.cartesian import Cartesian
+from common.oblique_coord import ObliqueCoord
+from common.cartesian import Cartesian
 from numpy import *
 
 cartesian = Cartesian(-2, 6)

@@ -8,9 +8,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 
-EDGE = 4
-STEP = 4 * EDGE + 1
+EDGE = 2
+STEP = 2 * EDGE + 1
 SCALE = 0.1
+
+R = 2
 
 
 def plot_grid(x, y, ax=None, **kwargs):
@@ -27,6 +29,11 @@ def sig(i):
     return -1 if (i < 0) else 1
 
 
+def dist(x, y):
+    d = (x ** 2 + y ** 2) - R ** 2
+    return d if d >= 0 else 0
+
+
 def f2(x: np.array, y: np.array):
     u = []
     v = []
@@ -37,8 +44,13 @@ def f2(x: np.array, y: np.array):
             # 这样取到的是网格中每个点的坐标，逐行取，从左到右。
             xx = x[i][j]
             yy = y[i][j]
-            uu = SCALE * (np.e ** xx)
-            vv = SCALE * (np.e ** yy)
+            uu = xx
+            # 坐标被r所挤压，距离r越近，挤压幅度越大，坐标可以占用别人的位置。最大移动范围是R，最小移动范围是0
+            uu = xx + R * (np.e ** - dist(xx, yy)) / np.e
+            # 除以np.e ** x， 让y的偏移量随着x的增大而变小
+            vv = yy + R * (np.e ** - dist(xx, yy)) / np.e
+            # / (np.e ** (xx))
+            print(xx, yy, uu, vv, (np.e**dist(xx, yy)))
             ui.append(uu)
             vi.append(vv)
             # vi.append(yy)

@@ -14,10 +14,11 @@
 import matplotlib.pyplot as plt
 # import numpy as np
 from matplotlib.axes import Axes
+from numpy.ma import arange
 from sympy import *
+import numpy as np
 
 EDGE = 6
-color = ['w', 'w', 'w', 'w']
 
 
 def fx(r, theta):
@@ -34,7 +35,7 @@ rect = [0.1, 0.1, 0.8, 0.8]
 ax_cartesian: Axes = fig.add_axes(rect)  # the carthesian axis:
 ax_cartesian.set_aspect('equal')
 ax_cartesian.grid(True, color='lightblue')
-ticks = range(-EDGE, EDGE+1)
+ticks = range(-EDGE, EDGE + 1)
 ax_cartesian.set_xticks(ticks)
 ax_cartesian.set_yticks(ticks)
 
@@ -51,7 +52,16 @@ line1 = [(0, 0), (x, y)]
 ax_cartesian.add_line(plt.Line2D(line1_xs, line1_ys))
 
 ax_polar: Axes = fig.add_axes(rect, polar=True, frameon=False)  # the polar axis:
-ax_polar.set_yticks(range(0, EDGE+1))
+polar_y_ticks = []
+curY = 0
+for i in range(0, 6):
+    curY = i**2
+    polar_y_ticks.append(curY)
+
+
+ax_polar.set_yticks(polar_y_ticks)
+polar_x_ticks = np.pi / 180. * np.linspace(0, 360, 32, endpoint=False)
+ax_polar.set_xticks(polar_x_ticks)
 # theta = np.linspace(-np.pi, np.pi, 100)
 # ax_polar.plot(theta, 1 - np.sin(3 * theta), color='Tomato', ls='--', lw=1, label='a 3-fold curve')
 # ax_polar.plot(theta, 1 + np.cos(theta), color='purple', linewidth=1, ls='-', label='a cardioid')

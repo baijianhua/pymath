@@ -2,7 +2,7 @@ from mpmath import *
 
 
 def f1(z):
-    return z
+    return e ** z
 
 
 def f2(z):

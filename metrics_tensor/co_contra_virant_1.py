@@ -1,9 +1,9 @@
 from matplotlib.pyplot import show
 from numpy import *
 
-from bases.cartesian import Cartesian
-from bases.common import get_column_from_matrix
-from bases.oblique_coord import ObliqueCoord
+from common.cartesian import Cartesian
+from common.common import get_column_from_matrix
+from common.oblique_coord import ObliqueCoord
 
 '''
 验证笛卡尔坐标、逆变坐标、协变坐标、度量张量之间的关系
