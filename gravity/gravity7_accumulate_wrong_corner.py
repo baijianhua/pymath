@@ -1,25 +1,20 @@
-# https://stackoverflow.com/questions/47295473/how-to-plot-using-matplotlib-python-colahs-deformed-grid
-
 """
-这个图的问题在于，横向、竖向、斜向，都有度量大于1的情况，这是肯定不对的。
-度量处处都小于原有度量。
+这个图形还是有问题的。对角线位置绘制的不对。所有方位的度量，都要小于原有度量。
+而这个图里面，有的地方对角线的长度大于原来的度量。
 
-但这个图的好处是它渐渐恢复平直是对的。其实也不是恢复平直，而是原来的单元格产生的挤出效应渐渐减小。
-
-但这个图形以及其函数足够研究Christoffel Symbol、度量张量。
+而且这个图里面，没有办法渐渐的恢复平直
 """
+from typing import List
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
-from sympy import symbols, cos, sin
 from sympy.diffgeom import Manifold, Patch, CoordSystem
 
 EDGE = 2
 STEP = 8*EDGE+1
-# SCALE = 0.1
 R = 1
 UNIT = 1
-MAX = 12
+MAX = 20
 
 rect: CoordSystem
 polar: CoordSystem
@@ -44,25 +39,28 @@ def create_points(reshape=False):
         y_row = []
         last_x = -1
         accumulate_x = 0
-        for col in range(0, MAX):
+        col_range: List = [*range(0, MAX)]  # *表示将表达式展开
+        # col_range = range(0, MAX)
+        for col in col_range:
             # 为一个y，创建一整行的点。y值不变，x值从左到右
             if not reshape:
                 x_row.append(col)
                 y_row.append(row)
             else:
-                # 直接计算某一个点的变形情况，这样是可以的。但这样的问题在于，没有显示出
-                # 单元格的增加，某些区域的单元格看起来变大了。实际中没有这种情况。因为单元格的高度和宽度
-                # 只会变小，不会变大。
-
-                x = row
-                y = col
+                # 从上一列取出历史x, 以显示x的累计变形效果
+                # 从上一行里面取出历史的y, 这样才能显示累计的变形效果
+                # 这个图形应该是接近正确的，但问题是怎么样才能让他恢复平直呢？ 要在什么地方加入新的单元格？
+                # 这个思考起来应该是比较简单的。可以考虑在累计缺1的情况下加入一个单元格，但有个问题是斜的方向怎么办？
+                x = last_x + 1
+                y = 0 if row == 0 else y_rows[row-1][col]+1
+                print("x=", row)
                 # 如果x==0, 没法计算y/x
                 x = 0.0001 if x == 0 else x
                 a = y/x
                 # 计算当前到圆心的距离
                 r = (y**2 + x**2)**0.5
                 # 缩短这个距离
-                r1 = r - r * (np.e ** (-r/2))
+                r1 = r - r * (np.e ** (-r/1.2))
                 # 计算调整过后的x, y坐标
                 x1 = (r1**2/(1+a**2))**0.5
                 y1 = a*x1
