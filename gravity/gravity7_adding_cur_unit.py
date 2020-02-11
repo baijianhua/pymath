@@ -16,12 +16,7 @@ from matplotlib.collections import LineCollection
 from sympy import symbols, cos, sin
 from sympy.diffgeom import Manifold, Patch, CoordSystem
 
-EDGE = 2
-STEP = 8*EDGE+1
-# SCALE = 0.1
-R = 1
-UNIT = 1
-MAX = 12
+MAX = 3
 
 rect: CoordSystem
 polar: CoordSystem
@@ -40,51 +35,28 @@ def create_points(reshape=False):
     # 其实先创建一堆点就可以。
     x_rows = []
     y_rows = []
-    last_y = -1
     for row in range(0, MAX):
         x_row = []
         y_row = []
-        last_x = -1
-        accumulate_x = 0
         for col in range(0, MAX):
             # 为一个y，创建一整行的点。y值不变，x值从左到右
             if not reshape:
                 x_row.append(col)
                 y_row.append(row)
             else:
-                # 从上一列取出历史x, 以显示x的累计变形效果
-                # 从上一行里面取出历史的y, 这样才能显示累计的变形效果
+                pre_x = 0 if col == 0 else x_row[col-1]
+                pre_y = 0 if row == 0 else y_rows[row - 1][col]
 
-                # 这个图形应该是接近正确的，但问题是怎么样才能让他恢复平直呢？ 要在什么地方加入新的单元格？
-                # 这个思考起来应该是比较简单的。可以考虑在累计缺1的情况下加入一个单元格，但有个问题是斜的方向怎么办？
+                r2 = (MAX - pre_x) ** 2 + (MAX - pre_y)**2
+                r = r2 ** 0.5
+                cur_unit = 1 - (np.e ** -(r/3))
+                x = 0 if col == 0 else pre_x + cur_unit
+                y = 0 if row == 0 else pre_y + cur_unit
+                print("row=", row, "col=", col, "pre_x", pre_x, "pre_y=", pre_y, "cur_unit=",
+                      cur_unit, "x=", x, "y=", y)
 
-                # 更进一步，应该有一个方法，自动计算出当前的度量单位是多少
-                # 所谓的单位长度，在不同的位置是不一样的，靠近圆心的短，远离圆心的长。三维空间的变形不明显。
-                # 但可以示意这种变形
-
-                # 这个度量值，看起来很像是特定点位的导数的值。只是这个函数是什么形式的？它的导数值是多少？
-                # 方程会不会是半径的某个指数形式的方程，对x,y 求偏导数然后计算全微分。
-
-                # 当循环到row,col的时候，由于变形的缘故，这两个值离平直坐标中的x,y 可能已经比较远了。那现在想求的是什么呢？
-
-                # 让x,y直接加上这个度量单位而不是加1.  这个度量值，就是点到圆心的距离调整后，减去上一个点
-
-                x = last_x + 1
-                y = 0 if row == 0 else y_rows[row-1][col]+1
-                print("x=", row)
-                # 如果x==0, 没法计算y/x
-                x = 0.0001 if x == 0 else x
-                a = y/x
-                # 计算当前到圆心的距离
-                r = (y**2 + x**2)**0.5
-                # 缩短这个距离
-                r1 = r - r * (np.e ** (-r/1.2))
-                # 计算调整过后的x, y坐标
-                x1 = (r1**2/(1+a**2))**0.5
-                y1 = a*x1
-                last_x = x1
-                x_row.append(x1)
-                y_row.append(y1)
+                x_row.append(x)
+                y_row.append(y)
 
         print("row end-------------------------")
         x_rows.append(x_row)
