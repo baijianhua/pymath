@@ -17,6 +17,8 @@ from sympy import symbols, cos, sin
 from sympy.diffgeom import Manifold, Patch, CoordSystem
 
 MAX = 10
+MAX_R = (2 * (MAX ** 2))**0.5
+SCALE = 1.1
 
 rect: CoordSystem
 polar: CoordSystem
@@ -46,14 +48,15 @@ def create_points(reshape=False):
             else:
                 pre_x = 0 if col == 0 else x_row[col-1]
                 pre_y = 0 if row == 0 else y_rows[row - 1][col]
-
-                r2 = (MAX - pre_x) ** 2 + (MAX - pre_y)**2
-                r = r2 ** 0.5
-                cur_unit = 1 - (np.e ** -(r/3))
-                x = 0 if col == 0 else pre_x + cur_unit
-                y = 0 if row == 0 else pre_y + cur_unit
-                print("row=", row, "col=", col, "pre_x", pre_x, "pre_y=", pre_y, "cur_unit=",
-                      cur_unit, "x=", x, "y=", y)
+                r = ((MAX - pre_x) ** 2 + (MAX - pre_y) ** 2)**0.5
+                exp = (r - MAX_R) / MAX_R
+                x_unit = 2 ** exp
+                print("exp=", exp, "r=", r, "MAX_R", MAX_R, "SCALE=", SCALE, "x_unit=", x_unit)
+                y_unit = x_unit
+                x = 0 if col == 0 else pre_x + x_unit
+                y = 0 if row == 0 else pre_y + y_unit
+                # print("row=", row, "col=", col, "pre_x", pre_x, "pre_y=", pre_y,
+                #       "x=", x, "y=", y)
 
                 x_row.append(x)
                 y_row.append(y)

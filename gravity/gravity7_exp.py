@@ -44,17 +44,10 @@ def create_points(reshape=False):
                 x_row.append(col)
                 y_row.append(row)
             else:
-                pre_x = 0 if col == 0 else x_row[col-1]
-                pre_y = 0 if row == 0 else y_rows[row - 1][col]
-
-                r2 = (MAX - pre_x) ** 2 + (MAX - pre_y)**2
-                r = r2 ** 0.5
-                cur_unit = 1 - (np.e ** -(r/3))
-                x = 0 if col == 0 else pre_x + cur_unit
-                y = 0 if row == 0 else pre_y + cur_unit
-                print("row=", row, "col=", col, "pre_x", pre_x, "pre_y=", pre_y, "cur_unit=",
-                      cur_unit, "x=", x, "y=", y)
-
+                x_exp = 0.95 ** (MAX - col - 1)
+                print("x_exp=", x_exp)
+                x = col * x_exp
+                y = row * (0.95 ** (MAX - row - 1))
                 x_row.append(x)
                 y_row.append(y)
 

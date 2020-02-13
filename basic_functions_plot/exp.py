@@ -3,7 +3,8 @@ from numpy import *
 import matplotlib.pyplot as plt
 
 x = arange(-2, 3, .01)
-y = e ** x
+# y = e ** x
+y = 1.5 ** x
 
 plt.plot(x, y)
 # draw a thick red hline at y=0 that spans the xrange

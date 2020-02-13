@@ -17,6 +17,8 @@ from sympy import symbols, cos, sin
 from sympy.diffgeom import Manifold, Patch, CoordSystem
 
 MAX = 10
+MAX_R = (2 * (MAX ** 2))**0.5
+SCALE = 1.1
 
 rect: CoordSystem
 polar: CoordSystem
@@ -46,14 +48,27 @@ def create_points(reshape=False):
             else:
                 pre_x = 0 if col == 0 else x_row[col-1]
                 pre_y = 0 if row == 0 else y_rows[row - 1][col]
+                r = (pre_x ** 2 + pre_y ** 2)**0.5
+                # 离圆心越近，缩小越严重。离得越远，unit 越接近于1
+                # 现在的问题在于，靠近圆心的部分增长太慢，因为unit是从圆心算起的。
+                # 如果指数值能在更小的范围内分布，就会好一些。
 
-                r2 = (MAX - pre_x) ** 2 + (MAX - pre_y)**2
-                r = r2 ** 0.5
-                cur_unit = 1 - (np.e ** -(r/3))
-                x = 0 if col == 0 else pre_x + cur_unit
-                y = 0 if row == 0 else pre_y + cur_unit
-                print("row=", row, "col=", col, "pre_x", pre_x, "pre_y=", pre_y, "cur_unit=",
-                      cur_unit, "x=", x, "y=", y)
+                # 这个算式可以保证exp在-1 到0之间, 而且不会变化很剧烈。因为 = 0才 = 1.
+                # 也许时空的最大变化量也就是这么多了，一个单元的从0到1的变化。
+                # 可能时空单元只有一个度量，就是光在固定周期内走过多远。只是它可以走向不同方向。
+                # 假设一种基本粒子，原子、电子什么都可以，它有度量，同时又有周期，光在一个固定周期
+                # 能够穿过的粒子的数量，就是我们的时空。
+
+                # 从0到1这个度量变化，足够容纳任意大的空间，因为可以从无穷小开始。
+
+                exp = (r - MAX_R) / MAX_R
+                x_unit = 3 ** exp + 0.37
+                print("exp=", exp, "r=", r, "MAX_R", MAX_R, "SCALE=", SCALE, "x_unit=", x_unit)
+                y_unit = x_unit
+                x = 0 if col == 0 else pre_x + x_unit
+                y = 0 if row == 0 else pre_y + y_unit
+                # print("row=", row, "col=", col, "pre_x", pre_x, "pre_y=", pre_y,
+                #       "x=", x, "y=", y)
 
                 x_row.append(x)
                 y_row.append(y)
