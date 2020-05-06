@@ -69,6 +69,7 @@ https://pythonforundergradengineers.com/sympy-expressions-and-equations.html
 ```python
 from sympy import *
 x, y, z1 = symbols('x_{1}^2 y z1')
+x, y, z1 = symbols('x_1^2 y z1') #这个就可以。升级了？
 expr1 = exp(x*y*z1)
 r2 = latex(diff(expr1, x, evaluate=False))
 ```
