@@ -62,14 +62,14 @@ def draw_cartesian_polar():
     fx = r * cos(theta)
     fy = r * sin(theta)
     """将fx,fy对theta偏微分，可知在一个特定的r,theta点，当theta发生变动时，x,y各自怎样变化"""
-    e_theta_x = diff(fx, theta)
-    e_theta_y = diff(fy, theta)
+    e_tx = diff(fx, theta)
+    e_ty = diff(fy, theta)
     # pprint(e_theta_x)
     # pprint(e_theta_y)
     """将fx,fy对r偏微分，可知在一个特定的r,theta点，当r发生变动时，x,y各自怎样变化,
     代入r,theta,可得到变化的方向和强度（用与r,theta点之间的线段表示）"""
-    e_r_x = diff(fx, r)
-    e_r_y = diff(fy, r)
+    e_rx = diff(fx, r)
+    e_ry = diff(fy, r)
 
     # pprint(e_r_x)
     # pprint(e_r_y)
@@ -102,8 +102,8 @@ def draw_cartesian_polar():
         draw_vector(ax_cartesian, (sx, sy), (ex, ey), color, linewidth)
 
     def draw_e(a, b, color='red'):
-        substitution_exp_and_draw(e_theta_x, e_theta_y, a, b, color)
-        substitution_exp_and_draw(e_r_x, e_r_y, a, b, color)
+        substitution_exp_and_draw(e_tx, e_ty, a, b, color)
+        substitution_exp_and_draw(e_rx, e_ry, a, b, color)
 
     # pprint(sin(pi/4))
     # pprint(cos(pi/4))
@@ -126,25 +126,26 @@ def draw_cartesian_polar():
     同样，当r变化，也会导致e_theta的变化，其变化为                                  
                                             e_theta_x_r = diff(e_theta_x,r),
                                             e_theta_x_r = diff(e_theta_y,r),          
+                                            
+    这个值应该更小才对。这些改变到底该如何描述呢？
+    下一个点的基向量该是什么样子的？该怎么去计算下一个点的基向量？
+    
+    一个点的变化要综合考虑r和theta的变化。一个向量就能表示r与theta两者的变化。
+    
+    而基向量已经由
+                                            
     """
-    e_theta_x_theta = diff(e_theta_x, theta)
-    e_theta_y_theta = diff(e_theta_y, theta)
-    e_theta_x_r = diff(e_theta_x, r)
-    e_theta_y_r = diff(e_theta_y, r)
-
-    e_r_x_theta = diff(e_r_x, theta)
-    e_r_y_theta = diff(e_r_y, theta)
-    e_r_x_r = diff(e_r_x, r)
-    e_r_y_r = diff(e_r_y, r)
+    d_etx = diff(e_tx, theta)+diff(e_tx, r)
+    d_ety = diff(e_ty, theta)+diff(e_ty, r)
+    d_erx = diff(e_rx, theta)+diff(e_ry, r)
+    d_ery = diff(e_rx, theta)+diff(e_ry, r)
 
     def draw_de(a, b, color="green"):
-        substitution_exp_and_draw(e_theta_x_theta, e_theta_y_theta, a, b, 'black', 2)
-        substitution_exp_and_draw(e_theta_x_r, e_theta_y_r, a, b, 'black', 2)
-        substitution_exp_and_draw(e_r_x_theta, e_r_y_theta, a, b, 'blue', 2)
-        substitution_exp_and_draw(e_r_x_r, e_r_y_r, a, b, 'blue', 2)
+        substitution_exp_and_draw(d_etx, d_ety, a, b, 'black', 2)
+        substitution_exp_and_draw(d_erx, d_ery, a, b, 'blue', 2)
 
     draw_de(3, 0)
-    draw_e(1, EDGE/360)
+    # draw_e(1, EDGE/360)
 
 
 def draw_vector(ax: Axes, start_point: MsPoint, end_point: MsPoint, color='red', linewidth=1):
