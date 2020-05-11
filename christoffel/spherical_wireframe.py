@@ -6,7 +6,7 @@ from sympy.diffgeom import *
 import matplotlib.pyplot as plt
 import numpy as np
 
-from common import plot_latex
+from common1 import plot_latex
 
 R = 10
 GRID = 10

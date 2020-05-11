@@ -9,7 +9,7 @@ tensor, Laplace operator, ...
 from sympy import var, sin, cos, pprint, Matrix, eye, trigsimp, Eq, \
     Function, simplify, sinh, cosh, expand, symbols, latex
 
-from common import plot_latex
+from common1 import plot_latex
 
 
 def laplace(f, g_inv, g_det, X):

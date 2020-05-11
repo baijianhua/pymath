@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 import numpy as np
 
-from common import plot_equation
+from common1 import plot_equation
 
 EDGE = 6
 # color = ['w', 'w', 'w', 'w']

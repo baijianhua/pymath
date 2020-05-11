@@ -1,5 +1,5 @@
 from sympy import *
-from common import plot_equation
+from common1 import plot_equation
 
 x, y = symbols('x y')
 eq = Eq(2*x+3 - y, 0)

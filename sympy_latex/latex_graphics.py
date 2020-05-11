@@ -1,6 +1,6 @@
 from sympy import *
 import warnings
-from common import plot_latex
+from common1 import plot_latex
 
 # 去除cp_math里面的警告
 with warnings.catch_warnings():

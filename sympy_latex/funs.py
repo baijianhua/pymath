@@ -1,5 +1,5 @@
 from sympy import *
-from common import plot_latex
+from common1 import plot_latex
 
 x, y = symbols('x y')
 f = Function('f1')

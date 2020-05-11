@@ -2,7 +2,7 @@ from sympy import symbols, sin, cos, pi, latex, pprint
 from sympy.diffgeom import Manifold, Patch, CoordSystem
 from sympy.simplify import simplify
 
-from common import plot_latex
+from common1 import plot_latex
 
 r, theta = symbols('r, theta')
 x, y = symbols('x, y')

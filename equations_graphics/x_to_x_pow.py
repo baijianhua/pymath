@@ -1,5 +1,5 @@
 # 没这句不行，利用了里面的Axes.ms_init = ms_init
-from common import *
+from common1 import *
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.axes import Axes
