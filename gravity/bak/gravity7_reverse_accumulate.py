@@ -12,7 +12,7 @@ from matplotlib.collections import LineCollection
 from sympy import symbols, cos, sin
 from sympy.diffgeom import Manifold, Patch, CoordSystem
 
-MAX = 4
+MAX = 10
 
 rect: CoordSystem
 polar: CoordSystem
