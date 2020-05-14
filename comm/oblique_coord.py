@@ -1,8 +1,8 @@
 from mpl_toolkits.axisartist.axislines import Axes
 from numpy import *
 
-from common.cartesian import Cartesian
-from common.common import get_column_from_matrix
+from comm.cartesian import Cartesian
+from comm.common import get_column_from_matrix
 
 
 class ObliqueCoord:

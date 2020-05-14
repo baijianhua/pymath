@@ -4,7 +4,7 @@
 或许应该直接写出来这个函数名形式的偏微分，而真正的表达式才让sympy来输出。
 """
 from sympy import *
-from common import plot_latex
+from common1 import plot_latex
 
 x, y, z = symbols('x_{1}^2 y z1')
 expr1 = exp(x*y*z)
