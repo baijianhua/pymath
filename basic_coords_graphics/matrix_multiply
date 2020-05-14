@@ -1,0 +1,29 @@
+from sympy import *
+import matplotlib.pyplot as plt
+from common.cartesian import Cartesian
+from common.oblique_coord import ObliqueCoord
+from numpy import *
+
+e1, e2, e1_x, e1_y, e2_x, e2_y, a, b = symbols('e1, e2, e1_x, e1_y, e2_x, e2_y, a, b')
+
+vector_in_local_coord = Matrix([a, b])
+local_coord = Matrix([
+    [e1_x, e2_x],
+    [e1_y, e2_y]
+])
+exp = MatMul(local_coord, vector_in_local_coord, evaluate=false)
+print_latex(exp)
+
+"""
+接下来画图说明
+"""
+cartesian = Cartesian(-2, 6)
+g1 = array([0.6, 0.2])
+g2 = array([0.2, 1.7])
+co_coord = ObliqueCoord(cartesian, g1, g2, "red")
+co_coord.draw_basis()
+vector = array([3, 2])
+co_coord.draw_vector(vector)
+co_coord.draw_dash_lines(co_coord.to_cartesian_components(vector), vector)
+
+plt.show()

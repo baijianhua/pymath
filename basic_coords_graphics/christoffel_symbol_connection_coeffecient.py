@@ -1,18 +1,46 @@
+import sympy as sym
 from sympy import *
 
-f_x, f_y, r, theta = symbols('f_x, f_y, r, theta')
+
+a, b, x, y, f_x, f_y, r, theta = symbols('a, b, x, y, f_x, f_y, r, theta')
+e_r, e_theta, e_r_x, e_r_y, e_theta_x, e_theta_y = \
+    symbols('e_r, e_\\theta, e_{r_x},e_{r_y}, e_{\\theta_x}, e_{\\theta_y}')
+
+
 fx = r * cos(theta)
 fy = r * sin(theta)
-e_tx = diff(fx, theta)
-e_ty = diff(fy, theta)
-e_rx = diff(fx, r)
-e_ry = diff(fy, r)
 
-print_latex(e_tx)
-print_latex(e_ty)
+local_bases = Matrix([[e_r, e_theta]])
+local_bases_xy = Matrix([
+    [e_r_x, e_theta_x],
+    [e_r_y, e_theta_y]
+])
+local_vector = Matrix([a, b])
+cartesian_vector = MatMul(local_bases, local_vector, evaluated=false)
+print_latex(cartesian_vector)
 
-print_latex(e_rx)
-print_latex(e_ry)
+# fx_exp = Eq(f_x, fx)
+# fy_exp = Eq(f_y, fy)
+# print("exp of et_x")
+# et_x = Derivative(fx, theta)
+# print_latex(et_x)
+# et_y = diff(fy, theta)
+ferx = Eq(e_r_x, diff(fx, r))
+fery = Eq(e_r_y, diff(fy, r))
+
+# print_latex(et_x)
+# print_latex(et_y)
+print_latex(e_r_x)
+print_latex(e_r_y)
+
+# d_etx = diff(et_x, theta) + diff(et_x, r)
+# d_ety = diff(et_y, theta) + diff(et_y, r)
+# d_erx = diff(e_rx, theta)+diff(e_ry, r)
+# d_ery = diff(e_rx, theta)+diff(e_ry, r)
+# print_latex(d_etx)
+# print_latex(d_ety)
+# print_latex(d_erx)
+# print_latex(d_ery)
 
 """
 我想联络系数、克氏符这个东西，最主要的作用，应该就是坐标平移
@@ -37,15 +65,4 @@ print_latex(e_ry)
 
 确实是。但那样就没有利用微积分中的一些好方法了。比如导数、极值、积分这些东西。有点运算可能还是很复杂
 的。不借助积分可能让人摸不着头绪。
-
-
 """
-d_etx = diff(e_tx, theta)+diff(e_tx, r)
-d_ety = diff(e_ty, theta)+diff(e_ty, r)
-d_erx = diff(e_rx, theta)+diff(e_ry, r)
-d_ery = diff(e_rx, theta)+diff(e_ry, r)
-print_latex(d_etx)
-print_latex(d_ety)
-print_latex(d_erx)
-print_latex(d_ery)
-
