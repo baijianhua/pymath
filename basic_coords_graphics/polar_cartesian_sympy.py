@@ -19,6 +19,8 @@ from typing import Tuple
 
 MsPoint = Tuple[float, float]
 
+a, b = symbols('a, b')
+
 
 def define_coord_sys():
     """定义Manifold, Patch, CoordSystem"""
@@ -65,12 +67,16 @@ def draw_cartesian_polar():
     def subs(exp1, exp2, a, b):
         return exp1.subs({r: a, theta: b}), exp2.subs({r: a, theta: b})
 
-    def draw_exp(a, b, exp1, exp2, color='red', linewidth=2):
+    def draw_expr(a, b, exp1, exp2, color='red', linewidth=2):
         x0, y0 = subs(fx, fy, a, b)
         x1, y1 = subs(exp1, exp2, a, b)
         draw_vector(ax_cartesian, (x0, y0), (x0 + x1, y0 + y1), color, linewidth)
 
-    r0, t0 = subs(fx, fy, 3, pi / 6)
+    def draw_vector_from_x0_y0(x1, y1, color='red', linewidth=2):
+        draw_vector(ax_cartesian, (x0, y0), (x0 + x1, y0 + y1), color, linewidth)
+
+    r0, t0 = (3, pi / 6)
+    x0, y0 = subs(fx, fy, r0, t0)
     """将fx,fy对r偏微分，可知在一个特定的r,theta点，当r发生变动时，x,y各自怎样变化,
         代入r,theta,可得到变化的方向和强度（用与r,theta点之间的线段表示）"""
     e_rx = diff(fx, r)
@@ -81,31 +87,29 @@ def draw_cartesian_polar():
     """
     局部坐标系的两个基向量
     """
-    draw_exp(r0, t0, e_rx, e_ry)
-    draw_exp(r0, t0 / 6, e_tx, e_ty)
-    """
-    当r变动时，两个基向量会怎样变化？    
-    """
+    draw_expr(r0, t0, e_rx, e_ry)
+    draw_expr(r0, t0, e_tx, e_ty)
+    """在局部坐标系绘制一个局部向量"""
     local_coord = Matrix([[e_rx, e_tx],
                           [e_ry, e_ty]
                           ])
-    local_vector = MatMul(local_coord.subs({r: 3, theta: pi / 6}), Matrix([3, 2])).doit(deep=True)
-    # local_vector = local_coord.subs({r: 3, theta: pi / 6}) * Matrix([3, 2])
-    pprint(local_vector)
+    local_vector_exp = MatMul(local_coord, Matrix([a, b]))
+    pprint(local_vector_exp.doit())
+    local_vector = local_vector_exp.subs({r: r0, theta: t0, a: 2, b: 1}).doit().evalf()
 
-    # v_x = local_vector[0]
-    # v_y = local_vector[1]
-    # print(v_y)
-    # print(v_x.doit())
-    #
-    # draw_vector(ax_cartesian, r0, t0, v_x, v_y)
+    x1 = local_vector[0]
+    y1 = local_vector[1]
+    draw_vector_from_x0_y0(x1, y1)
 
+    """
+    当r变动时，两个基向量会怎样变化？    
+    """
     erx_r = diff(e_rx, r)
     ery_r = diff(e_ry, r)
+    draw_expr(r0, t0, erx_r, ery_r, color='green')
     etx_r = diff(e_tx, r)
     ety_r = diff(e_ty, r)
-    # draw_exp(3, pi / 6, erx_r, ery_r, 'blue')
-    # draw_exp(3, pi / 6, etx_r, ety_r, 'blue')
+    draw_expr(r0, t0, etx_r, ety_r, color='green')
 
     erx_t = diff(e_rx, theta)
     ery_t = diff(e_ry, theta)

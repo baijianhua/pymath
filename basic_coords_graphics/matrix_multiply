@@ -12,7 +12,7 @@ local_coord = Matrix([
     [e1_y, e2_y]
 ])
 exp = MatMul(local_coord, vector_in_local_coord, evaluate=false)
-print_latex(exp)
+pprint(exp.doit())
 
 """
 接下来画图说明

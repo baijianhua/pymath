@@ -1,7 +1,7 @@
 from numpy import *
 
-from comm.cartesian import Cartesian
-from comm.oblique_coord import ObliqueCoord
+from common.cartesian import Cartesian
+from common.oblique_coord import ObliqueCoord
 
 
 

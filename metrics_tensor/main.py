@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 # from common.cartesian import Cartesian
 from numpy import *
 
-from comm.cartesian import Cartesian
-from comm.oblique_coord import ObliqueCoord
+from common.cartesian import Cartesian
+from common.oblique_coord import ObliqueCoord
 
 cartesian = Cartesian(-2, 6)
 # 用numpy的array而非python原生array,来方便做向量与标量的乘法，否则很麻烦
