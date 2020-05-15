@@ -19,6 +19,8 @@ from typing import Tuple
 
 MsPoint = Tuple[float, float]
 
+a, b = symbols('a, b')
+
 
 def define_coord_sys():
     """定义Manifold, Patch, CoordSystem"""
@@ -61,91 +63,63 @@ def draw_cartesian_polar():
     """这两个函数，用来确定r和theta与x,y之间的对应关系，给定一对儿r,theta，可以确定一对x,y"""
     fx = r * cos(theta)
     fy = r * sin(theta)
+
+    def subs(exp1, exp2, a, b):
+        return exp1.subs({r: a, theta: b}), exp2.subs({r: a, theta: b})
+
+    def draw_expr(a, b, exp1, exp2, color='red', linewidth=2):
+        x0, y0 = subs(fx, fy, a, b)
+        x1, y1 = subs(exp1, exp2, a, b)
+        draw_vector(ax_cartesian, (x0, y0), (x0 + x1, y0 + y1), color, linewidth)
+
+    def draw_vector_from_x0_y0(x1, y1, color='red', linewidth=2):
+        draw_vector(ax_cartesian, (x0, y0), (x0 + x1, y0 + y1), color, linewidth)
+
+    r0, t0 = (3, pi / 6)
+    x0, y0 = subs(fx, fy, r0, t0)
+    """将fx,fy对r偏微分，可知在一个特定的r,theta点，当r发生变动时，x,y各自怎样变化,
+        代入r,theta,可得到变化的方向和强度（用与r,theta点之间的线段表示）"""
+    e_rx = diff(fx, r)
+    e_ry = diff(fy, r)
     """将fx,fy对theta偏微分，可知在一个特定的r,theta点，当theta发生变动时，x,y各自怎样变化"""
     e_tx = diff(fx, theta)
     e_ty = diff(fy, theta)
-    # pprint(e_theta_x)
-    # pprint(e_theta_y)
-    """将fx,fy对r偏微分，可知在一个特定的r,theta点，当r发生变动时，x,y各自怎样变化,
-    代入r,theta,可得到变化的方向和强度（用与r,theta点之间的线段表示）"""
-    e_rx = diff(fx, r)
-    e_ry = diff(fy, r)
+    """
+    局部坐标系的两个基向量
+    """
+    draw_expr(r0, t0, e_rx, e_ry)
+    draw_expr(r0, t0, e_tx, e_ty)
+    """在局部坐标系绘制一个局部向量"""
+    local_coord = Matrix([[e_rx, e_tx],
+                          [e_ry, e_ty]
+                          ])
+    local_vector_exp = MatMul(local_coord, Matrix([a, b]))
+    pprint(local_vector_exp.doit())
+    local_vector = local_vector_exp.subs({r: r0, theta: t0, a: 2, b: 1}).doit().evalf()
 
-    # pprint(e_r_x)
-    # pprint(e_r_y)
-
-    def fxy(a, b):
-        return fx.subs({r: a, theta: b}), fy.subs({r: a, theta: b})
-
-    def substitution_exp_and_draw(exp1: Function, exp2: Function, a, b, color='black', linewidth=1):
-        """
-        注意，以sx,sy为起点，终点却不是ex,ey,erx,ery,还要做一个坐标转换。因为那些值是以sx,sy为原点算出来的。
-        直接计算出来的ex,ey并不是向量在以0,0为原点的笛卡尔坐标系的终点，而是以sx,sy为原点的变化幅度。所以真正
-        想要映射到0,0为原点的笛卡尔坐标系，需要加上sx,sy。
-        :param b:
-        :param a:
-        :param exp2:
-        :param exp1:
-        :param color:
-        :param color:
-        """
-        (sx, sy) = fxy(a, b)
-        ex = sx + exp1.subs({r: a, theta: b})
-        ey = sy + exp2.subs({r: a, theta: b})
-        print('---------------------')
-        pprint(exp1)
-        pprint(exp2)
-        print("r=", a, "theta=", b)
-        print("x0=", sx, "y0=", sy, "val=", sx.evalf(), sy.evalf())
-        print("x1=", ex, "y1=", ey, "val=", ex.evalf(), ey.evalf())
-
-        draw_vector(ax_cartesian, (sx, sy), (ex, ey), color, linewidth)
-
-    def draw_e(a, b, color='red'):
-        substitution_exp_and_draw(e_tx, e_ty, a, b, color)
-        substitution_exp_and_draw(e_rx, e_ry, a, b, color)
-
-    # pprint(sin(pi/4))
-    # pprint(cos(pi/4))
-    # draw_e(3, pi / 6)
-    draw_e(3, 0)
-    # draw_e(1, pi / 4)
-    # draw_e(5, pi / 2)
-    # draw_e(4, 0)
+    x1 = local_vector[0]
+    y1 = local_vector[1]
+    draw_vector_from_x0_y0(x1, y1)
 
     """
-    接下来就到了联络系数，也就是Christoffel Symbol了，却有点晕乎乎的，到底是谁针对谁的变化？
-    当theta移动，原来的两个向量都会变化。
-    
-    原来的基向量e_theta，是由r,theta和 e_theta_x = diff(fx,theta) 
-                                     e_theta_y = diff(fy,theta)构成的。
-
-    那么，当theta变化的时候，e_theta的变化就是 e_theta_x_theta = diff(e_theta_x,theta), 
-                                            e_theta_y_theta = diff(e_theta_y,theta),
-
-    同样，当r变化，也会导致e_theta的变化，其变化为                                  
-                                            e_theta_x_r = diff(e_theta_x,r),
-                                            e_theta_x_r = diff(e_theta_y,r),          
-                                            
-    这个值应该更小才对。这些改变到底该如何描述呢？
-    下一个点的基向量该是什么样子的？该怎么去计算下一个点的基向量？
-    
-    一个点的变化要综合考虑r和theta的变化。一个向量就能表示r与theta两者的变化。
-    
-    而基向量已经由
-                                            
+    当r变动时，两个基向量会怎样变化？    
     """
-    d_etx = diff(e_tx, theta)+diff(e_tx, r)
-    d_ety = diff(e_ty, theta)+diff(e_ty, r)
-    d_erx = diff(e_rx, theta)+diff(e_ry, r)
-    d_ery = diff(e_rx, theta)+diff(e_ry, r)
+    erx_r = diff(e_rx, r)
+    ery_r = diff(e_ry, r)
+    draw_expr(r0, t0, erx_r, ery_r, color='green')
+    etx_r = diff(e_tx, r)
+    ety_r = diff(e_ty, r)
+    draw_expr(r0, t0, etx_r, ety_r, color='green')
 
-    def draw_de(a, b, color="green"):
-        substitution_exp_and_draw(d_etx, d_ety, a, b, 'black', 2)
-        substitution_exp_and_draw(d_erx, d_ery, a, b, 'blue', 2)
+    erx_t = diff(e_rx, theta)
+    ery_t = diff(e_ry, theta)
+    etx_t = diff(e_tx, theta)
+    ety_t = diff(e_ty, theta)
+    # draw_exp(3, pi / 6, erx_t, ery_t, 'green')
+    # draw_exp(3, pi / 6, etx_t, ety_t, 'green')
 
-    draw_de(3, 0)
-    # draw_e(1, EDGE/360)
+    # der =
+    # det =
 
 
 def draw_vector(ax: Axes, start_point: MsPoint, end_point: MsPoint, color='red', linewidth=1):
