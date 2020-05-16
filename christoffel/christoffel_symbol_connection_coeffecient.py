@@ -1,23 +1,17 @@
-import sympy as sym
 from sympy import *
 
-
-a, b, x, y, f_x, f_y, r, theta = symbols('a, b, x, y, f_x, f_y, r, theta')
-e_r, e_theta, e_r_x, e_r_y, e_theta_x, e_theta_y = \
-    symbols('e_r, e_\\theta, e_{r_x},e_{r_y}, e_{\\theta_x}, e_{\\theta_y}')
-
-
+r, theta = symbols('r, theta')
+# polar to cartesian
 fx = r * cos(theta)
 fy = r * sin(theta)
 
+# base vector
 erx = diff(fx, r)
 ery = diff(fy, r)
-# print_latex(erx)
-# print_latex(ery)
-
 etx = diff(fx, theta)
 ety = diff(fy, theta)
 
+# base vector changes.
 erxr = diff(erx, r)
 eryr = diff(ery, r)
 etxr = diff(etx, r)
@@ -38,3 +32,27 @@ print_latex(eryt)
 print_latex(etxt)
 print_latex(etyt)
 
+# christoffel symbol
+print("resolve equations=============")
+a, b = symbols('Gamma^r_rr, Gamma^theta_rr')
+eq1 = a * erx + b * etx - erxr
+eq2 = a * ery + b * ety - eryr
+print_latex(solve([eq1, eq2], [a, b]))
+
+a = Symbol('\\Gamma^r_{\\theta r}')
+b = Symbol('\\Gamma^\\theta_{\\theta r}')
+eq1 = a * erx + b * etx - etxr
+eq2 = a * ery + b * ety - etyr
+print_latex(solve([eq1, eq2], [a, b]))
+
+a = Symbol('\\Gamma^r_{r \\theta}')
+b = Symbol('\\Gamma^\\theta_{r \\theta}')
+eq1 = a * erx + b * etx - erxt
+eq2 = a * ery + b * ety - eryt
+print_latex(solve([eq1, eq2], [a, b]))
+
+a = Symbol('\\Gamma^r_{\\theta \\theta}')
+b = Symbol('\\Gamma^\\theta_{\\theta \\theta}')
+eq1 = a * erx + b * etx - etxt
+eq2 = a * ery + b * ety - etyt
+print_latex(solve([eq1, eq2], [a, b]))
