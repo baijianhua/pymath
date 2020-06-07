@@ -25,11 +25,14 @@ gamma_exps = solve(eq3, gamma)
 # 求 gamma的值，因为gamma开平方，所以取[1]，正值，忽略负值
 gamma_exp = gamma_exps[1]
 # print_latex(gamma_exps)
-pprint.pformat(gamma, "=", gamma_exp)
-pprint(cancel(gamma_exp))
-
+pprint(Eq(gamma, gamma_exp))
+pprint(Eq(gamma, cancel(gamma_exp)))
 
 # 将gamma带回t1的表达式
-t1_final = solve(Eq(t1_exp.subs({gamma: gamma_exp, x: c*t, x1: c*t1}), t1), t1)
-pprint(t1_final)
-
+eq4 = Eq(t1, t1_exp.subs({gamma: gamma_exp, x1: c * t1}))
+t1_1 = factor(cancel(solve(eq4, t1)[0]))
+pprint(Eq(t1, t1_1))
+t1_final = solve(Eq(t1_exp.subs({gamma: gamma_exp, x: c * t, x1: c * t1}), t1), t1)[0]
+pprint(Eq(t1, t1_final))
+t_final = solve(Eq(t1, t1_final), t)[0]
+pprint(Eq(t, t_final))
