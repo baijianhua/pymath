@@ -16,35 +16,30 @@ x1_exp = solve(eq2, x1)[0]
 # x 的表达式，用x1,v,t1表示
 x_exp = solve(eq1, x)[0]
 # x*x', 并代入x = ct, x'=ct'
-x_x1_exp = (x_exp * x1_exp).subs({x: c * t, x1: c * t1})
+x_times_x1 = (x_exp * x1_exp).subs({x: c * t, x1: c * t1})
 # 用ct,ct' 列方程, 这时候未知数只剩下 gamma
-eq3 = Eq(c * t * c * t1, x_x1_exp)
+eq3 = Eq(c * t * c * t1, x_times_x1)
 gamma_exps = solve(eq3, gamma)
 # 求 gamma的值，因为gamma开平方，所以取[1]，正值，忽略负值
-gamma_exp = gamma_exps[1]
-# print_latex(gamma_exps)
-# pprint(Eq(gamma, gamma_exp))
-pprint(Eq(gamma, cancel(gamma_exp)))
-
-"""求t1，t的转换关系"""
-# 将gamma带回t1的表达式
-# t1 的表达式，用x,v,x1表示
-t1_exp = solve(eq1, t1)[0]
-eq4 = t1_exp.subs({gamma: gamma_exp, x1: c*t1})
-t1_1 = solve(Eq(t1, eq4), t1)[0]
-# pprint(Eq(t1, t1_1))
-
-t1_final = solve(Eq(t1_exp.subs({gamma: gamma_exp, x: c * t, x1: c * t1}), t1), t1)[0]
-# pprint(Eq(t1, t1_final))
-t_final = solve(Eq(t1, t1_final), t)[0]
-# pprint(Eq(t, t_final))
+gamma_exp = cancel(gamma_exps[1])
+pprint(Eq(gamma, gamma_exp))
 
 """根据gamma的值，求x, x'的转换关系"""
-x_x1_eq = Eq(x1, x1_exp).subs(gamma, gamma_exp)
-x1_from_x = solve(x_x1_eq, x1)[0]
+x1_from_x = x1_exp.subs(gamma, gamma_exp)
 pprint(Eq(x1, x1_from_x))
-x_from_x1 = solve(x_x1_eq, x)[0]
-# 还要将t换成t'才行。不能含有S坐标系的东西。t是S坐标系的。
+x_from_x1 = x_exp.subs(gamma, gamma_exp)
 pprint(Eq(x, x_from_x1))
 
+"""求t1，t的转换关系"""
+t1_exp = factor(x_exp.subs(x1, x1_exp))
+t1_exp = solve(Eq(x, t1_exp), t1)[0]
+t1_exp = factor(t1_exp)
+pprint(t1_exp)
+t1_exp = t1_exp.subs(gamma, gamma_exp).simplify()
+pprint(Eq(t1, t1_exp))
 
+t_exp = x1_exp.subs(x, x_exp)
+t_exp = solve(Eq(x1, t_exp), t)[0]
+t_exp = t_exp.subs(gamma, gamma_exp).simplify()
+# t_exp = factor(t_exp)
+pprint(Eq(t, t_exp))
