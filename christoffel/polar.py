@@ -38,7 +38,7 @@ r = rho * cos(phi) + rho * sin(phi)
 """
 下面这个计算的结果是，是协变基矢量中的e_rho。
 一个r,分别对rho和phi求偏导数，这又是什么意思？怎么样组合，得到两个向量？好迷惑。
-"""、
+"""
 
 
 ferho = diff(r, rho)
