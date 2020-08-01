@@ -176,7 +176,9 @@ class ObliqueCoord:
                      linewidth=linewidth
                      )
 
-    def draw_vector(self, vector_in_oblique, linewidth=2):
+    def draw_vector(self, vector_in_oblique, linewidth=2, draw_components=False):
         c = self.to_cartesian_components(vector_in_oblique)
         print("c", c)
         self.draw_line(self.__origin, c, linewidth=linewidth, linestyle="-")
+        if draw_components:
+            self.draw_oblique_components(self.to_cartesian_components(vector_in_oblique))
