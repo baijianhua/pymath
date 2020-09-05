@@ -1,5 +1,5 @@
 from numpy import *
-from common.cartesian import Cartesian
+from common.orthogonalcoord import OrthogonalCoord
 from common.oblique_coord import ObliqueCoord
 import matplotlib.pyplot as plt
 
@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 max    = 5
 lspace = 50
 
-ax = Cartesian(-1, max)
+ax = OrthogonalCoord(-1, max)
 # python有精度损失。
 v = 0.5
 gamma = 1/sqrt(1-v**2)

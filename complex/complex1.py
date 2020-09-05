@@ -6,7 +6,7 @@ def f1(z):
 
 
 def f2(z):
-    return z ** 3
+    return z ** 2
 
 
 def f3(z):
@@ -26,8 +26,8 @@ def f6(z):
 
 
 cplot(f1)
-# cplot(f2)
-# cplot(f3)
-# cplot(f4)
-# cplot(f5)
-# cplot(f6)
+cplot(f2)
+cplot(f3)
+cplot(f4)
+cplot(f5)
+cplot(f6)

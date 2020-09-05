@@ -3,10 +3,10 @@ import matplotlib.pyplot as plt
 # from common.cartesian import Cartesian
 from numpy import *
 
-from common.cartesian import Cartesian
+from common.orthogonalcoord import OrthogonalCoord
 from common.oblique_coord import ObliqueCoord
 
-cartesian = Cartesian(-2, 6)
+cartesian = OrthogonalCoord(-2, 6)
 # 用numpy的array而非python原生array,来方便做向量与标量的乘法，否则很麻烦
 # 协变坐标系
 g1 = array([0.6, 0.2])

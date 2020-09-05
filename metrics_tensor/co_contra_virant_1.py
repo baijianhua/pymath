@@ -1,7 +1,7 @@
 from matplotlib.pyplot import show
 from numpy import *
 
-from common.cartesian import Cartesian
+from common.orthogonalcoord import OrthogonalCoord
 from common.common import get_column_from_matrix
 from common.oblique_coord import ObliqueCoord
 
@@ -9,7 +9,7 @@ from common.oblique_coord import ObliqueCoord
 验证笛卡尔坐标、逆变坐标、协变坐标、度量张量之间的关系
 还不认可逆变、协变坐标和对偶坐标系的概念
 '''
-ax = Cartesian(-1, 15)
+ax = OrthogonalCoord(-1, 15)
 # python有精度损失。
 
 # M的读数是M.T这个坐标系的。不能直接绘制。

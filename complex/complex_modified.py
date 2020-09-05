@@ -115,13 +115,7 @@ def _test_cplxmap():
     z = cplxgrid(30)
     w1 = z
     w2 = z ** 2
-    w3 = (z ** 4 - 1) ** (1 / 4)
-    w4 = 1 / z
-    w5 = np.arctan(2 * z)
-    w6 = np.sqrt(z)
-    w = [w1, w2, w3, w4, w5, w6]
-    for i in w:
-        cplxmap(z, i)
+    cplxmap(z, w2)
 
 
 def _test_cplxroot():
@@ -134,4 +128,4 @@ def _test_cplxroot():
 
 if __name__ == '__main__':
     _test_cplxmap()
-    _test_cplxroot()
+#    _test_cplxroot()

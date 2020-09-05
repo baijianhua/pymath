@@ -2,10 +2,10 @@ from matplotlib import pyplot as plt
 from mpl_toolkits.axisartist import Axes, SubplotZero, AxisArtist
 from numpy import *
 
-class Cartesian:
+class OrthogonalCoord:
     ax: Axes
 
-    def __init__(self, min_size=-2, max_size=8):
+    def __init__(self, min_size=-2, max_size=8,show_grid=True):
         """
         初始化整个屏幕的范围。绘制笛卡尔坐标轴、刻度、网格
         :param min_size: 负值，x y坐标轴的最小值
@@ -28,7 +28,7 @@ class Cartesian:
         # 锁定纵横比
         self.ax.set_aspect("equal")
         # 显示网格
-        self.ax.grid(True)
+        self.ax.grid(show_grid)
         self.ax.set_xlim(min_size, max_size)
         self.ax.set_ylim(min_size, max_size)
 
@@ -61,6 +61,7 @@ class Cartesian:
         从表示向量的点，分别向两个坐标轴绘制虚线
         """
         self.ax.plot([point[0], point[0]],
-                     [point[1], 0], color="black", linestyle="dashed")
+                     [point[1], 0], color="black", linestyle="dashed", linewidth=1)
         self.ax.plot([point[0], 0],
-                     [point[1], point[1]], color="black", linestyle="dashed")
+                     [point[1], point[1]], color="black", linestyle="dashed", linewidth=1)
+

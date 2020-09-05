@@ -1,6 +1,6 @@
 from sympy import *
 import matplotlib.pyplot as plt
-from common.cartesian import Cartesian
+from common.orthogonalcoord import OrthogonalCoord
 from common.oblique_coord import ObliqueCoord
 from numpy import *
 
@@ -17,7 +17,7 @@ pprint(exp.doit())
 """
 接下来画图说明
 """
-cartesian = Cartesian(-2, 6)
+cartesian = OrthogonalCoord(-2, 6)
 g1 = array([0.6, 0.2])
 g2 = array([0.2, 1.7])
 co_coord = ObliqueCoord(cartesian, g1, g2, "red")

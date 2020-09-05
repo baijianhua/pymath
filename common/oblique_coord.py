@@ -1,7 +1,7 @@
 from mpl_toolkits.axisartist.axislines import Axes
 from numpy import *
 
-from common.cartesian import Cartesian
+from common.orthogonalcoord import OrthogonalCoord
 from common.common import get_column_from_matrix
 
 
@@ -21,10 +21,10 @@ class ObliqueCoord:
     ax: Axes
     color = "black"
     linewidth = 1
-    cartesian: 'Cartesian'
+    cartesian: 'OrthogonalCoord'
     __origin = array([0, 0])
 
-    def __init__(self, coord: 'Cartesian', g1: array, g2: array, color="black", linewidth=1):
+    def __init__(self, coord: 'OrthogonalCoord', g1: array, g2: array, color="black", linewidth=1):
         """
         用两个基向量构成一个新的坐标系
         :param coord: 笛卡尔坐标系。包含了坐标边界以及Axes对象
@@ -120,8 +120,8 @@ class ObliqueCoord:
         c1 = self.g1 * v[0]
         c2 = self.g2 * v[1]
         # 从基向量的分量的笛卡尔坐标点，朝着向量所在点绘制虚线
-        self.draw_line(c1, vector_in_cartesian)
-        self.draw_line(c2, vector_in_cartesian)
+        self.draw_line(c1, vector_in_cartesian, linewidth=1)
+        self.draw_line(c2, vector_in_cartesian, linewidth=1)
 
     def get_dual_coord(self, color="black") -> 'ObliqueCoord':
         """

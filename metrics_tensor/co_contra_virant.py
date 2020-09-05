@@ -1,6 +1,6 @@
 from numpy import *
 
-from common.cartesian import Cartesian
+from common.orthogonalcoord import OrthogonalCoord
 from common.oblique_coord import ObliqueCoord
 
 
@@ -13,7 +13,7 @@ from common.oblique_coord import ObliqueCoord
 验证笛卡尔坐标、逆变坐标、协变坐标、度量张量之间的关系
 还不认可逆变、协变坐标和对偶坐标系的概念
 '''
-ax = Cartesian(-3, 7)
+ax = OrthogonalCoord(-3, 7)
 # python有精度损失。
 g1 = array([0.8, 0.3])
 g2 = array([0.1, 1.1])
