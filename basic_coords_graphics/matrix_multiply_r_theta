@@ -1,0 +1,22 @@
+from sympy import *
+
+r, theta, a, b = symbols('r, theta, a, b')
+x = r * cos(theta)
+y = r * sin(theta)
+er_x = diff(x, r)
+er_y = diff(y, r)
+et_x = diff(x, theta)
+et_y = diff(y, theta)
+
+vector_in_local_coord = Matrix([a, b]).subs({a: 3, b: pi/6})
+# local_coord = Matrix([
+#     [er_x, et_x],
+#     [er_y, et_y]
+# ]).subs({r: 3, theta: pi / 6}).doit()
+local_coord = Matrix([
+    [er_x, et_x],
+    [er_y, et_y]
+]).subs({r: 3, theta: pi / 6}).doit()
+print(local_coord)
+exp = MatMul(local_coord, vector_in_local_coord, evaluate=false).doit()
+print_latex(exp)
