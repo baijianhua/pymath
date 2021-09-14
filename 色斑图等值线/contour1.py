@@ -3,9 +3,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 # 根据 x y 坐标返回 z 坐标
-def z(x,y):
+def z(x, y):
     return (1 - x / 2 + x ** 5 + y ** 3) * np.exp(-x ** 2 - y ** 2)
+
 
 n = 256
 x = np.linspace(-3, 3, n)
